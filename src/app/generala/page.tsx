@@ -111,7 +111,7 @@ export default function GeneralaPage() {
               onClick={reset}
               className="rounded-md bg-white text-slate-900 px-2.5 py-1 text-xs font-extrabold"
             >
-              Reset
+              Reiniciar
             </button>
           </div>
         </header>
