@@ -234,12 +234,19 @@ export function SectionBoard({ count }: { count: number }) {
       className="flex flex-col items-center justify-center"
       style={{
         background: "rgba(255,255,255,0.08)",
-        borderRadius: 10,
+        borderRadius: 6,
         padding: 10,
         width: "10rem",
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          padding: "1rem 0",
+          gap: 10,
+        }}
+      >
         {squares.map((s, i) => (
           <SquareSVG sides={s} key={i} />
         ))}
