@@ -77,7 +77,17 @@ export const useDiezMilStore = create<DiezMilState>()(
         });
       },
 
-      reset: () => set({ players: initialPlayers, turns: emptyTurns }),
+      reset: () =>
+        set((state) => {
+          const freshTurns = state.players.reduce<Record<string, number[]>>(
+            (acc, p) => {
+              acc[p.id] = []; // <-- todas las filas de ese jugador, vacías
+              return acc;
+            },
+            {}
+          );
+          return { turns: freshTurns }; // <-- mantiene players
+        }),
     }),
     {
       name: "have-fun:10000",

@@ -121,7 +121,14 @@ export const useGeneralaStore = create<GeneralaState>()(
         });
       },
 
-      reset: () => set({ players: initialPlayers, scores: initialScores }),
+      reset: () =>
+        set((state) => {
+          const freshScores: Scores = state.players.reduce((acc, p) => {
+            acc[p.id] = emptyRow();
+            return acc;
+          }, {} as Scores);
+          return { scores: freshScores }; // <-- mantiene players tal cual están
+        }),
     }),
     {
       name: "have-fun:generala",
