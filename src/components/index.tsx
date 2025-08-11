@@ -188,6 +188,9 @@ export function TeamColumn({
 }) {
   const { teams, increment, decrement } = useTrucoStore();
   const t = teams[teamKey];
+  const total = t.malas + t.buenas;
+
+  console.log({ total });
 
   return (
     <div
@@ -200,14 +203,18 @@ export function TeamColumn({
         gap: 14,
       }}
     >
-      <div
-        style={{
-          alignSelf: "center",
-          color: "white",
-          fontWeight: 700,
-        }}
-      >
-        {label}
+      <div className="flex flex-col text-lg items-center text-white -mb-1">
+        <div
+          style={{
+            alignSelf: "center",
+            fontWeight: 700,
+          }}
+        >
+          {label}
+        </div>
+        <span className="text-[0.7rem] font-extralight !text-muted-foreground -mt-0.5 text-gray-400">
+          {total} puntos
+        </span>
       </div>
 
       <div
@@ -223,13 +230,13 @@ export function TeamColumn({
         style={{ display: "flex", gap: 16, marginTop: 6 }}
       >
         <button
-          className="w-14 text-lg py-2 font-bold bg-red-600 rounded-sm text-white"
+          className="w-14 text-lg py-1 font-semibold bg-red-600 rounded-sm text-white"
           onClick={() => decrement(teamKey)}
         >
           -
         </button>
         <button
-          className="w-14 text-lg font-bold py-2 bg-blue-600 text-white rounded-sm"
+          className="w-14 text-lg font-semibold py-1 bg-blue-600 text-white rounded-sm"
           onClick={() => increment(teamKey)}
         >
           +
