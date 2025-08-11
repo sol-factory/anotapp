@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-dvh bg-slate-900 text-slate-100 flex justify-center pt-20">
+    <main className="min-h-dvh bg-slate-900 text-slate-100 flex justify-center pt-14">
       <div className="w-full max-w-[560px]">
         {/* Logo + nombre */}
         <div className="flex flex-col items-center gap-3 mb-8">
