@@ -47,7 +47,7 @@ function EditablePlayerName({ id, name }: { id: string; name: string }) {
       ) : (
         <button
           onClick={() => setEditing(true)}
-          className="w-fit truncate text-left text-xs font-bold text-white/90 hover:text-white"
+          className="w-fit min-w-12 truncate text-left text-xs font-bold text-white/90 hover:text-white"
           title="Editar nombre"
         >
           {name}
@@ -76,7 +76,7 @@ export default function GeneralaPage() {
   };
   const closeModal = () => setTarget(null);
 
-  const onPick = (v: number | "X") => {
+  const onPick = (v: number | "X" | null) => {
     if (!target) return;
     setScore(target.playerId, target.category, v); // ✔️ sin cast
     setTarget(null);
@@ -124,7 +124,7 @@ export default function GeneralaPage() {
           <table className="table-fixed border-collapse w-16">
             {/* columnas: jugada ancha + jugadores ultra finitos */}
             <colgroup>
-              <col style={{ width: 90 }} />
+              <col style={{ width: 80 }} />
               {players.map((p) => (
                 <col key={p.id} style={{ width: 74 }} />
               ))}

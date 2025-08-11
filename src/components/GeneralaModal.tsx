@@ -2,13 +2,14 @@
 
 import { CategoryKey, scoringConfig } from "@/hooks/use-generala-store";
 
-type Opt = { label: string; value: number | "X" };
+type Opt = { label: string; value: number | "X" | null };
 
 function upperOptions(face: number): Opt[] {
   const opts: Opt[] = [];
   for (let k = 1; k <= 5; k++)
     opts.push({ label: String(k * face), value: k * face });
   opts.push({ label: "Tachar", value: "X" });
+  opts.push({ label: "Borrar", value: null });
   return opts;
 }
 
