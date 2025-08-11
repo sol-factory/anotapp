@@ -87,7 +87,7 @@ export default function DiezMilModal({
             step={50}
             value={val}
             onChange={(e) => setVal(e.target.value)}
-            className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-slate-900 outline-none"
+            className="flex-1 !w-52 rounded-md border border-slate-300 px-3 py-2 text-slate-900 outline-none"
             placeholder="Ej: -100, 1150"
             onKeyDown={(e) => {
               if (e.key === "Enter" && canSave) onPick(num);
