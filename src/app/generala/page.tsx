@@ -30,7 +30,7 @@ function EditablePlayerName({ id, name }: { id: string; name: string }) {
   };
 
   return (
-    <div className="flex items-center gap-2 text-center justify-center safe-pad pt-20">
+    <div className="flex items-center gap-2 text-center justify-center safe-pad ">
       {editing ? (
         <input
           autoFocus
@@ -94,7 +94,7 @@ export default function GeneralaPage() {
   const canAdd = players.length < 6;
 
   return (
-    <main className="min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p-4">
+    <main className="pt-16 min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p-4">
       <div className="mx-auto w-fit min-w-72">
         <header className="mb-3 flex items-center justify-between">
           <h1
