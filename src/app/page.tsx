@@ -56,7 +56,7 @@ export default function TrucoPage() {
 
 const resetBtn: React.CSSProperties = {
   width: "100%",
-  padding: "12px 14px",
+  padding: "6px 14px",
   borderRadius: 12,
   border: "1px solid rgba(255,255,255,0.18)",
   background: "white",

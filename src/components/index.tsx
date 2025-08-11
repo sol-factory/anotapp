@@ -178,7 +178,6 @@ export function TeamColumn({
 }) {
   const { teams, increment, decrement } = useTrucoStore();
   const t = teams[teamKey];
-  const total = t.malas + t.buenas;
 
   return (
     <div
@@ -194,15 +193,11 @@ export function TeamColumn({
       <div
         style={{
           alignSelf: "center",
-          background: "white",
-          color: "#0f172a",
-          padding: "6px 18px",
-          borderRadius: 999,
+          color: "white",
           fontWeight: 700,
-          boxShadow: "0 2px 0 rgba(0,0,0,0.25)",
         }}
       >
-        {label} ({total})
+        {label}
       </div>
 
       <div
@@ -218,13 +213,13 @@ export function TeamColumn({
         style={{ display: "flex", gap: 10, marginTop: 6 }}
       >
         <button
-          className="w-10 py-2 px-3 bg-blue-600 text-white rounded-sm"
+          className="w-14 py-2 bg-blue-600 text-white rounded-sm"
           onClick={() => increment(teamKey)}
         >
           +
         </button>
         <button
-          className="w-10 py-2 px-3 bg-red-600 rounded-sm text-white"
+          className="w-14 py-2 bg-red-600 rounded-sm text-white"
           onClick={() => decrement(teamKey)}
         >
           -
