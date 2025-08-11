@@ -3,6 +3,26 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+}
+
+/* utilidades simples */
+.safe-pad {
+  padding-top: max(16px, var(--sat));
+  padding-right: max(16px, var(--sar));
+  padding-bottom: max(16px, var(--sab));
+  padding-left: max(16px, var(--sal));
+}
+
+/* si querés solo top/bottom */
+.pt-safe {
+  padding-top: max(16px, var(--sat));
+}
+.pb-safe {
+  padding-bottom: max(16px, var(--sab));
 }
 
 @theme inline {

@@ -29,6 +29,12 @@ export const metadata: Metadata = {
     title: "Anotapp",
   },
 };
+// 2) viewport que permita usar el área segura
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover", // <- clave para notch
+} as const;
 
 export default function RootLayout({
   children,

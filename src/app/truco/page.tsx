@@ -9,6 +9,7 @@ export default function TrucoPage() {
 
   return (
     <main
+      className="safe-pad"
       style={{
         minHeight: "100dvh",
         display: "flex",

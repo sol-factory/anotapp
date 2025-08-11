@@ -30,7 +30,7 @@ function EditablePlayerName({ id, name }: { id: string; name: string }) {
   };
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1 safe-pad">
       {editing ? (
         <input
           autoFocus

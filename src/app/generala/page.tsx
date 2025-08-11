@@ -6,7 +6,6 @@ import {
   CATEGORY_DEFS,
   CategoryKey,
   getTotal,
-  ScoreCell,
 } from "@/hooks/use-generala-store";
 import GeneralaModal, { optionsForCategory } from "@/components/GeneralaModal";
 
@@ -31,7 +30,7 @@ function EditablePlayerName({ id, name }: { id: string; name: string }) {
   };
 
   return (
-    <div className="flex items-center gap-2 text-center justify-center">
+    <div className="flex items-center gap-2 text-center justify-center safe-pad">
       {editing ? (
         <input
           autoFocus
