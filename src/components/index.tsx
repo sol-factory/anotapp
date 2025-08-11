@@ -109,20 +109,22 @@ export function SquareSVG({
       {/* ABAJO */}
       {sides.bottom && (
         <>
+          {/* punta roja a la izquierda */}
           <line
             x1={x1}
             y1={y2}
-            x2={x2 - stroke * 0.7}
+            x2={x1 + tipLen}
             y2={y2}
-            stroke="#D9B25F"
+            stroke="#C62828"
             {...base}
           />
+          {/* palo hacia la derecha */}
           <line
-            x1={x2 - stroke * 0.7}
+            x1={x1 + tipLen}
             y1={y2}
             x2={x2}
             y2={y2}
-            stroke="#C62828"
+            stroke="#D9B25F"
             {...base}
           />
         </>

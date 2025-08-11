@@ -99,7 +99,7 @@ export default function GeneralaPage() {
       <div className="mx-auto w-fit min-w-72">
         <header className="mb-3 flex items-center justify-between">
           <h1
-            className="text-base sm:text-md font-extrabold"
+            className="text-base sm:text-md font-extrabold cursor-pointer"
             onClick={() => window.history.back()}
           >
             🎲 Generala

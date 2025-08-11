@@ -25,7 +25,7 @@ export default function TrucoPage() {
         <header className="w-full flex items-center justify-center mb-6">
           <h1
             onClick={() => window.history.back()}
-            className="text-base sm:text-lg font-extrabold text-white"
+            className="text-base sm:text-lg font-extrabold text-white cursor-pointer"
           >
             🗡️ Truco
           </h1>
