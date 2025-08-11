@@ -4,82 +4,6 @@ import { useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import toast from "react-hot-toast";
 
-export function WinConfetti() {
-  const teams = useTrucoStore((s) => s.teams);
-
-  const prevTotals = useRef({ us: 0, them: 0 });
-  const lastFire = useRef<{ winner: "us" | "them" | null; ts: number }>({
-    winner: null,
-    ts: 0,
-  });
-
-  useEffect(() => {
-    const usTotal = teams.us.malas + teams.us.buenas;
-    const themTotal = teams.them.malas + teams.them.buenas;
-
-    let winner: "us" | "them" | null = null;
-    if (prevTotals.current.us < 30 && usTotal === 30) winner = "us";
-    else if (prevTotals.current.them < 30 && themTotal === 30) winner = "them";
-
-    prevTotals.current = { us: usTotal, them: themTotal };
-    if (!winner) return;
-
-    const now = Date.now();
-    if (
-      lastFire.current.winner === winner &&
-      now - lastFire.current.ts < 2000
-    ) {
-      return; // anti-doble-disparo
-    }
-    lastFire.current = { winner, ts: now };
-
-    fireConfettiSoft();
-
-    // Toast de victoria con CTA para reiniciar
-    const label = winner === "us" ? "Nosotros" : "Ellos";
-    victoryToast(label, () => {
-      const { reset } = useTrucoStore.getState();
-      reset();
-      try {
-        useTrucoStore.persist?.clearStorage?.();
-        useTrucoStore.persist?.rehydrate?.();
-      } catch {}
-    });
-  }, [teams]);
-
-  return null;
-}
-
-function fireConfettiSoft() {
-  confetti({
-    particleCount: 60,
-    spread: 65,
-    startVelocity: 45,
-    gravity: 0.9,
-    ticks: 170,
-    origin: { x: 0.5, y: 0.7 },
-    scalar: 0.9,
-  });
-  setTimeout(() => {
-    confetti({
-      particleCount: 22,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0.2, y: 0.8 },
-      scalar: 0.8,
-    });
-  }, 140);
-  setTimeout(() => {
-    confetti({
-      particleCount: 22,
-      angle: 120,
-      spread: 55,
-      origin: { x: 0.8, y: 0.8 },
-      scalar: 0.8,
-    });
-  }, 220);
-}
-
 export function SquareSVG({
   sides,
   size = 50,
@@ -296,19 +220,19 @@ export function TeamColumn({
 
       <div
         className="items-center flex"
-        style={{ display: "flex", gap: 10, marginTop: 6 }}
+        style={{ display: "flex", gap: 16, marginTop: 6 }}
       >
         <button
-          className="w-14 py-2 bg-blue-600 text-white rounded-sm"
-          onClick={() => increment(teamKey)}
-        >
-          +
-        </button>
-        <button
-          className="w-14 py-2 bg-red-600 rounded-sm text-white"
+          className="w-14 text-lg py-2 font-bold bg-red-600 rounded-sm text-white"
           onClick={() => decrement(teamKey)}
         >
           -
+        </button>
+        <button
+          className="w-14 text-lg font-bold py-2 bg-blue-600 text-white rounded-sm"
+          onClick={() => increment(teamKey)}
+        >
+          +
         </button>
       </div>
     </div>
@@ -431,4 +355,80 @@ export function victoryToast(teamLabel: string, onRestart?: () => void) {
     ),
     { duration: 6000 }
   );
+}
+
+export function WinConfetti() {
+  const teams = useTrucoStore((s) => s.teams);
+
+  const prevTotals = useRef({ us: 0, them: 0 });
+  const lastFire = useRef<{ winner: "us" | "them" | null; ts: number }>({
+    winner: null,
+    ts: 0,
+  });
+
+  useEffect(() => {
+    const usTotal = teams.us.malas + teams.us.buenas;
+    const themTotal = teams.them.malas + teams.them.buenas;
+
+    let winner: "us" | "them" | null = null;
+    if (prevTotals.current.us < 30 && usTotal === 30) winner = "us";
+    else if (prevTotals.current.them < 30 && themTotal === 30) winner = "them";
+
+    prevTotals.current = { us: usTotal, them: themTotal };
+    if (!winner) return;
+
+    const now = Date.now();
+    if (
+      lastFire.current.winner === winner &&
+      now - lastFire.current.ts < 2000
+    ) {
+      return; // anti-doble-disparo
+    }
+    lastFire.current = { winner, ts: now };
+
+    fireConfettiSoft();
+
+    // Toast de victoria con CTA para reiniciar
+    const label = winner === "us" ? "Nosotros" : "Ellos";
+    victoryToast(label, () => {
+      const { reset } = useTrucoStore.getState();
+      reset();
+      try {
+        useTrucoStore.persist?.clearStorage?.();
+        useTrucoStore.persist?.rehydrate?.();
+      } catch {}
+    });
+  }, [teams]);
+
+  return null;
+}
+
+function fireConfettiSoft() {
+  confetti({
+    particleCount: 60,
+    spread: 65,
+    startVelocity: 45,
+    gravity: 0.9,
+    ticks: 170,
+    origin: { x: 0.5, y: 0.7 },
+    scalar: 0.9,
+  });
+  setTimeout(() => {
+    confetti({
+      particleCount: 22,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0.2, y: 0.8 },
+      scalar: 0.8,
+    });
+  }, 140);
+  setTimeout(() => {
+    confetti({
+      particleCount: 22,
+      angle: 120,
+      spread: 55,
+      origin: { x: 0.8, y: 0.8 },
+      scalar: 0.8,
+    });
+  }, 220);
 }
