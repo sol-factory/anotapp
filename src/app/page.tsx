@@ -2,27 +2,11 @@
 
 import { confirmWithToast, TeamColumn, WinConfetti } from "@/components";
 import { useTrucoStore } from "@/hooks/use-truco-store";
-import { useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 
 export default function TrucoPage() {
   const { reset } = useTrucoStore();
-  const router = useRouter();
-  const onReset = () => {
-    if (confirm("¿Seguro que querés reiniciar la partida?")) {
-      reset(); // estado en memoria
-      // limpiar persistencia
-      try {
-        // opción A (API oficial de zustand/persist):
-        useTrucoStore.persist?.clearStorage?.();
-        // rehidratar para dejar el storage en blanco con el estado actual
-        useTrucoStore.persist?.rehydrate?.();
-        router.refresh();
-      } catch {}
-      // opción B (equivalente y directa):
-      // localStorage.removeItem("have-fun:truco");
-    }
-  };
+
   return (
     <main
       style={{
