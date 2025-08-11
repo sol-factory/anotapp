@@ -148,13 +148,7 @@ export function SquareSVG({
   );
 }
 
-export function SectionBoard({
-  count,
-  title,
-}: {
-  count: number;
-  title: string;
-}) {
+export function SectionBoard({ count }: { count: number }) {
   const squares = countToThreeSquares(count);
   return (
     <div
@@ -166,10 +160,6 @@ export function SectionBoard({
         width: "10rem",
       }}
     >
-      <div style={{ color: "#cbd5e1", fontSize: 12, margin: "0 4px 8px" }}>
-        {title}
-      </div>
-
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {squares.map((s, i) => (
           <SquareSVG sides={s} key={i} />
@@ -219,8 +209,8 @@ export function TeamColumn({
         className="items-center"
         style={{ display: "flex", flexDirection: "column", gap: 14 }}
       >
-        <SectionBoard title="Malas" count={t.malas} />
-        <SectionBoard title="Buenas" count={t.buenas} />
+        <SectionBoard count={t.malas} />
+        <SectionBoard count={t.buenas} />
       </div>
 
       <div
