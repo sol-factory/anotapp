@@ -8,68 +8,24 @@ import {
   getTotal,
 } from "@/hooks/use-generala-store";
 import GeneralaModal, { optionsForCategory } from "@/components/GeneralaModal";
-
-/* --- celda de nombre editable --- */
-function EditablePlayerName({ id, name }: { id: string; name: string }) {
-  const renamePlayer = useGeneralaStore((s) => s.renamePlayer);
-  const removePlayer = useGeneralaStore((s) => s.removePlayer);
-
-  const [editing, setEditing] = useState(false);
-  const [val, setVal] = useState(name);
-
-  // si cambió por otro lado (persist / reset), sync
-  if (!editing && val !== name) setVal(name);
-
-  const save = () => {
-    if (val.trim() && val !== name) renamePlayer(id, val);
-    setEditing(false);
-  };
-  const cancel = () => {
-    setVal(name);
-    setEditing(false);
-  };
-
-  return (
-    <div className="flex items-center gap-2 text-center justify-center">
-      {editing ? (
-        <input
-          autoFocus
-          value={val}
-          onChange={(e) => setVal(e.target.value.slice(0, 10))}
-          onBlur={save}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") save();
-            if (e.key === "Escape") cancel();
-          }}
-          className="w-[56px] rounded-sm border border-white/20 bg-white/10 px-1 py-0.5 text-xs font-semibold text-white focus:outline-none"
-          maxLength={10}
-        />
-      ) : (
-        <button
-          onClick={() => setEditing(true)}
-          className="w-fit min-w-12 truncate text-left text-xs font-bold text-white/90 hover:text-white"
-          title="Editar nombre"
-        >
-          {name}
-        </button>
-      )}
-      <button
-        onClick={() => removePlayer(id)}
-        className="text-[10px] text-red-300 hover:text-red-400 cursor-pointer"
-        title="Quitar jugador"
-      >
-        ✕
-      </button>
-    </div>
-  );
-}
+import PlayerEditModal, { PlayerRef } from "@/components/PlayerEditModal";
 
 type CellTarget = { playerId: string; category: CategoryKey } | null;
 
 export default function GeneralaPage() {
-  const { players, scores, addPlayer, setScore, reset } = useGeneralaStore();
+  const {
+    players,
+    scores,
+    addPlayer,
+    setScore,
+    reset,
+    renamePlayer,
+    removePlayer,
+  } = useGeneralaStore();
+
   const [target, setTarget] = useState<CellTarget>(null);
   const [showTotals, setShowTotals] = useState(false); // 👈 oculto por defecto
+  const [editingPlayer, setEditingPlayer] = useState<PlayerRef | null>(null);
 
   const openCell = (playerId: string, category: CategoryKey) => {
     setTarget({ playerId, category });
@@ -137,7 +93,13 @@ export default function GeneralaPage() {
                 </th>
                 {players.map((p) => (
                   <th key={p.id} className="px-1.5 py-0 text-left">
-                    <EditablePlayerName id={p.id} name={p.name} />
+                    <button
+                      onClick={() => setEditingPlayer(p)}
+                      className="mx-auto cursor-pointer block w-[66px] truncate text-center text-xs font-bold text-white/90 hover:text-white"
+                      title="Editar jugador"
+                    >
+                      {p.name}
+                    </button>
                   </th>
                 ))}
               </tr>
@@ -184,12 +146,12 @@ export default function GeneralaPage() {
                   className="sticky left-0 z-10 px-3 py-2 text-sm font-extrabold select-none border-t-1 border-slate-700"
                   onClick={() => setShowTotals(!showTotals)}
                 >
-                  {showTotals ? "👁️" : "🫣"} Total
+                  {showTotals ? "👁️" : ""} Total
                 </td>
                 {players.map((p) => (
                   <td
                     key={p.id}
-                    className="px-1 py-1 text-center text-sm font-extrabold border-t-1 border-slate-700"
+                    className="px-1 py-1 text-center text-sm font-extrabold border-t-1 border-slate-700 select-none"
                   >
                     {showTotals ? getTotal(scores, p.id) : "🫣"}
                   </td>
@@ -233,6 +195,13 @@ export default function GeneralaPage() {
           </div>
         </div>
       )}
+      <PlayerEditModal
+        open={!!editingPlayer}
+        player={editingPlayer}
+        onClose={() => setEditingPlayer(null)}
+        onRename={renamePlayer}
+        onRemove={removePlayer}
+      />
     </main>
   );
 }

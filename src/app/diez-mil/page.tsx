@@ -1,68 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import {
-  useDiezMilStore,
-  getMaxTurns,
-  getTotalDiezMil,
-} from "@/hooks/use-diezmil-store";
+import { useState } from "react";
+import { useDiezMilStore, getTotalDiezMil } from "@/hooks/use-diezmil-store";
 import DiezMilModal from "@/components/DiezMilModal";
 import { Toaster } from "react-hot-toast";
 import { confirmWithToast } from "@/components";
 import WinConfettiDiezMil from "@/components/WinConfettiDiezMil";
+import PlayerEditModal, { PlayerRef } from "@/components/PlayerEditModal";
 
 /* Editable header name (angostito) */
-function EditablePlayerName({ id, name }: { id: string; name: string }) {
-  const renamePlayer = useDiezMilStore((s) => s.renamePlayer);
-  const removePlayer = useDiezMilStore((s) => s.removePlayer);
-
-  const [editing, setEditing] = useState(false);
-  const [val, setVal] = useState(name);
-  if (!editing && val !== name) setVal(name);
-
-  const save = () => {
-    if (val.trim() && val !== name) renamePlayer(id, val);
-    setEditing(false);
-  };
-  const cancel = () => {
-    setVal(name);
-    setEditing(false);
-  };
-
-  return (
-    <div className="flex items-center gap-1 safe-pad">
-      {editing ? (
-        <input
-          autoFocus
-          value={val}
-          onChange={(e) => setVal(e.target.value.slice(0, 10))}
-          onBlur={save}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") save();
-            if (e.key === "Escape") cancel();
-          }}
-          className="w-[56px] rounded-sm border border-white/20 bg-white/10 px-1 py-0.5 text-xs font-semibold text-white focus:outline-none"
-          maxLength={10}
-        />
-      ) : (
-        <button
-          onClick={() => setEditing(true)}
-          className="w-fit truncate text-left text-xs font-bold text-white/90 hover:text-white"
-          title="Editar nombre"
-        >
-          {name}
-        </button>
-      )}
-      <button
-        onClick={() => removePlayer(id)}
-        className="text-[10px] text-red-300 hover:text-red-400"
-        title="Quitar jugador"
-      >
-        ✕
-      </button>
-    </div>
-  );
-}
 
 type Target = { playerId: string; turnIndex: number } | null;
 
@@ -73,25 +19,13 @@ export default function DiezMilPage() {
     addPlayer,
     removePlayer,
     setScoreAt,
-    undoLast,
     reset,
+    renamePlayer,
   } = useDiezMilStore();
 
   const [target, setTarget] = useState<Target>(null);
-  const [showTotals, setShowTotals] = useState(true); // totales visibles por defecto acá
+  const [editingPlayer, setEditingPlayer] = useState<PlayerRef | null>(null);
 
-  const maxTurns = useMemo(
-    () =>
-      getMaxTurns(
-        turns,
-        players.map((p) => p.id)
-      ),
-    [turns, players]
-  );
-  const rows = Math.max(1, maxTurns + 1); // siempre dejar una fila libre para el próximo turno
-
-  const openCell = (playerId: string, idx: number) =>
-    setTarget({ playerId, turnIndex: idx });
   const closeModal = () => setTarget(null);
 
   const onPick = (value: number) => {
@@ -116,7 +50,7 @@ export default function DiezMilPage() {
   };
 
   return (
-    <main className="min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p-4">
+    <main className="min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p-4 safe-pad">
       <Toaster position="top-center" />
       <WinConfettiDiezMil />
 
@@ -156,7 +90,7 @@ export default function DiezMilPage() {
 
             <thead>
               <tr className="bg-slate-800/60">
-                <th className="sticky left-0 z-10 bg-slate-800/60 px-3 py-2 text-left text-xs">
+                <th className="sticky left-0 z-10 bg-slate-800/60 px-3 py-2 text-left text-sm">
                   Turno
                 </th>
                 {players.map((p) => (
@@ -165,19 +99,24 @@ export default function DiezMilPage() {
                     className="px-1.5 py-1 text-left align-text-top"
                   >
                     <div className="flex flex-col items-center gap-1">
-                      <EditablePlayerName id={p.id} name={p.name} />
-                      {showTotals && (
-                        <div className="flex flex-col items-center">
-                          <span className="text-sm text-blue-400 font-semibold">
-                            {getTotalDiezMil(turns, p.id)}
+                      <button
+                        onClick={() => setEditingPlayer(p)}
+                        className="mx-auto cursor-pointer block w-[66px] truncate text-center text-sm font-bold text-white/90 hover:text-white"
+                        title="Editar jugador"
+                      >
+                        {p.name}
+                      </button>
+
+                      <div className="flex flex-col items-center">
+                        <span className="text-sm text-blue-400 font-semibold">
+                          {getTotalDiezMil(turns, p.id)}
+                        </span>
+                        {10000 - getTotalDiezMil(turns, p.id) <= 1500 && (
+                          <span className="text-[8px] text-green-400 font-extralight">
+                            {10000 - getTotalDiezMil(turns, p.id)}
                           </span>
-                          {10000 - getTotalDiezMil(turns, p.id) <= 1500 && (
-                            <span className="text-[8px] text-green-400 font-extralight">
-                              {10000 - getTotalDiezMil(turns, p.id)}
-                            </span>
-                          )}
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </th>
                 ))}
@@ -274,6 +213,13 @@ export default function DiezMilPage() {
             : ""
         }
         onPick={onPick}
+      />
+      <PlayerEditModal
+        open={!!editingPlayer}
+        player={editingPlayer}
+        onClose={() => setEditingPlayer(null)}
+        onRename={renamePlayer}
+        onRemove={removePlayer}
       />
     </main>
   );
