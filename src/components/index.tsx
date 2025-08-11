@@ -208,6 +208,7 @@ export function TeamColumn({
             alignSelf: "center",
             fontWeight: 700,
           }}
+          className="underline"
         >
           {label}
         </div>
@@ -216,6 +217,7 @@ export function TeamColumn({
       <div
         className="items-center"
         style={{ display: "flex", flexDirection: "column", gap: 10 }}
+        onDoubleClick={() => increment(teamKey)}
       >
         <SectionBoard count={t.malas} />
         <hr className="w-full block px-10 text-gray-400" />
@@ -227,13 +229,13 @@ export function TeamColumn({
         style={{ display: "flex", gap: 16, marginTop: 6 }}
       >
         <button
-          className="w-14 text-lg py-1 font-semibold bg-red-600 rounded-sm text-white"
+          className="w-14 cursor-pointer text-lg py-1 font-semibold bg-red-600 hover:bg-red-700 rounded-sm text-white"
           onClick={() => decrement(teamKey)}
         >
           -
         </button>
         <button
-          className="w-14 text-lg font-semibold py-1 bg-blue-600 text-white rounded-sm"
+          className="w-14 cursor-pointer text-lg font-semibold py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-sm"
           onClick={() => increment(teamKey)}
         >
           +
