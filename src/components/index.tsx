@@ -1,5 +1,84 @@
 import { countToThreeSquares } from "@/helpers/truco";
 import { TeamKey, useTrucoStore } from "@/hooks/use-truco-store";
+import { useEffect, useRef } from "react";
+import confetti from "canvas-confetti";
+import toast from "react-hot-toast";
+
+export function WinConfetti() {
+  const teams = useTrucoStore((s) => s.teams);
+
+  const prevTotals = useRef({ us: 0, them: 0 });
+  const lastFire = useRef<{ winner: "us" | "them" | null; ts: number }>({
+    winner: null,
+    ts: 0,
+  });
+
+  useEffect(() => {
+    const usTotal = teams.us.malas + teams.us.buenas;
+    const themTotal = teams.them.malas + teams.them.buenas;
+
+    let winner: "us" | "them" | null = null;
+    if (prevTotals.current.us < 30 && usTotal === 30) winner = "us";
+    else if (prevTotals.current.them < 30 && themTotal === 30) winner = "them";
+
+    prevTotals.current = { us: usTotal, them: themTotal };
+    if (!winner) return;
+
+    const now = Date.now();
+    if (
+      lastFire.current.winner === winner &&
+      now - lastFire.current.ts < 2000
+    ) {
+      return; // anti-doble-disparo
+    }
+    lastFire.current = { winner, ts: now };
+
+    fireConfettiSoft();
+
+    // Toast de victoria con CTA para reiniciar
+    const label = winner === "us" ? "Nosotros" : "Ellos";
+    victoryToast(label, () => {
+      const { reset } = useTrucoStore.getState();
+      reset();
+      try {
+        useTrucoStore.persist?.clearStorage?.();
+        useTrucoStore.persist?.rehydrate?.();
+      } catch {}
+    });
+  }, [teams]);
+
+  return null;
+}
+
+function fireConfettiSoft() {
+  confetti({
+    particleCount: 60,
+    spread: 65,
+    startVelocity: 45,
+    gravity: 0.9,
+    ticks: 170,
+    origin: { x: 0.5, y: 0.7 },
+    scalar: 0.9,
+  });
+  setTimeout(() => {
+    confetti({
+      particleCount: 22,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0.2, y: 0.8 },
+      scalar: 0.8,
+    });
+  }, 140);
+  setTimeout(() => {
+    confetti({
+      particleCount: 22,
+      angle: 120,
+      spread: 55,
+      origin: { x: 0.8, y: 0.8 },
+      scalar: 0.8,
+    });
+  }, 220);
+}
 
 export function SquareSVG({
   sides,
@@ -226,5 +305,123 @@ export function TeamColumn({
         </button>
       </div>
     </div>
+  );
+}
+
+/* ------- menos confetti, en 1 ráfaga + 2 mini pulses ------- */
+export function confirmWithToast(message: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const id = toast.custom(
+      (t) => (
+        <div
+          className="flex flex-col"
+          style={{
+            background: "white",
+            color: "#0f172a",
+            borderRadius: 12,
+            padding: "12px",
+            boxShadow: "0 10px 30px rgba(0,0,0,.15)",
+            width: 280,
+            gap: 10,
+          }}
+        >
+          <div style={{ fontWeight: 700, textAlign: "center" }}>{message}</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <button
+              onClick={() => {
+                toast.remove(id);
+                resolve(true);
+              }}
+              style={{
+                flex: 1,
+                background: "#0f172a",
+                color: "white",
+                borderRadius: 8,
+                padding: "8px 10px",
+                fontWeight: 700,
+              }}
+            >
+              Sí, reiniciar
+            </button>
+            <button
+              onClick={() => {
+                toast.remove(id);
+                resolve(false);
+              }}
+              style={{
+                flex: 1,
+                background: "transparent",
+                color: "#0f172a",
+                border: "1px solid #cbd5e1",
+                borderRadius: 8,
+                padding: "8px 10px",
+                fontWeight: 700,
+              }}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: 1000 * 60 } // queda hasta que respondas
+    );
+  });
+}
+
+export function victoryToast(teamLabel: string, onRestart?: () => void) {
+  const id = toast.custom(
+    (t) => (
+      <div
+        className="flex flex-col items-center"
+        style={{
+          background: "white",
+          color: "#0f172a",
+          borderRadius: 12,
+          padding: "12px",
+          boxShadow: "0 10px 30px rgba(0,0,0,.15)",
+          width: 300,
+          gap: 8,
+        }}
+      >
+        <div style={{ fontWeight: 800 }}>🏆 ¡{teamLabel} ganaron 30!</div>
+        <div style={{ fontSize: 13, color: "#334155" }}>
+          ¿Querés empezar una nueva partida?
+        </div>
+        <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
+          <button
+            onClick={() => {
+              toast.remove(id);
+              onRestart?.();
+            }}
+            className="w-[10rem]"
+            style={{
+              background: "#0f172a",
+              color: "white",
+              borderRadius: 8,
+              padding: "8px 10px",
+              fontWeight: 700,
+            }}
+          >
+            Nueva partida
+          </button>
+          <button
+            onClick={() => toast.remove(id)}
+            style={{
+              flex: 1,
+              background: "transparent",
+              color: "#0f172a",
+              border: "1px solid #cbd5e1",
+              borderRadius: 8,
+              padding: "8px 10px",
+              fontWeight: 700,
+              width: "6rem",
+            }}
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    ),
+    { duration: 6000 }
   );
 }

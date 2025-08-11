@@ -27,20 +27,6 @@ export const useTrucoStore = create<State>()(
           else if (t.buenas < 15) t.buenas++;
           return { teams: { ...state.teams, [team]: t } };
         });
-        const { malas, buenas } = get().teams[team];
-        if (malas === 15 && buenas === 15) {
-          setTimeout(() => {
-            if (
-              confirm(
-                `${
-                  team === "us" ? "¡Nosotros" : "¡Ellos"
-                } ganaron! ¿Empezar una nueva partida?`
-              )
-            ) {
-              get().reset();
-            }
-          }, 0);
-        }
       },
 
       decrement: (team) => {

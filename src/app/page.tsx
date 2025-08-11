@@ -1,8 +1,9 @@
 "use client";
 
-import { TeamColumn } from "@/components";
+import { confirmWithToast, TeamColumn, WinConfetti } from "@/components";
 import { useTrucoStore } from "@/hooks/use-truco-store";
 import { useRouter } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 
 export default function TrucoPage() {
   const { reset } = useTrucoStore();
@@ -34,13 +35,24 @@ export default function TrucoPage() {
         background: "#0b1220",
       }}
     >
+      <Toaster position="top-center" />
+      <WinConfetti />
       <div className="flex gap-3">
         <TeamColumn teamKey="us" label="Nosotros" />
         <TeamColumn teamKey="them" label="Ellos" />
       </div>
 
       <div style={{ marginTop: 8 }}>
-        <button onClick={onReset} style={resetBtn}>
+        <button
+          onClick={async () => {
+            const result = await confirmWithToast("¿Seguro quiere reiniciar?");
+            console.log({ result });
+            if (result) {
+              reset();
+            }
+          }}
+          style={resetBtn}
+        >
           Reiniciar
         </button>
       </div>
