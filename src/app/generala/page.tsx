@@ -98,7 +98,12 @@ export default function GeneralaPage() {
     <main className="min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p-4">
       <div className="mx-auto w-fit min-w-72">
         <header className="mb-3 flex items-center justify-between">
-          <h1 className="text-base sm:text-md font-extrabold">🎲 Generala</h1>
+          <h1
+            className="text-base sm:text-md font-extrabold"
+            onClick={() => window.history.back()}
+          >
+            🎲 Generala
+          </h1>
           <div className="flex gap-2">
             <button
               onClick={() => canAdd && addPlayer()}

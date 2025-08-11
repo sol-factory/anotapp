@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 
 export function SquareSVG({
   sides,
-  size = 50,
-  stroke = 3,
+  size = 60,
+  stroke = 4,
 }: {
   sides: {
     left: boolean;
@@ -31,6 +31,7 @@ export function SquareSVG({
     strokeLinecap: "round",
   };
 
+  const tipLen = stroke * 0.7;
   return (
     <svg
       viewBox={`0 0 ${size} ${size}`}
@@ -41,25 +42,26 @@ export function SquareSVG({
       {/* IZQUIERDA */}
       {sides.left && (
         <>
+          {/* palo (madera) desde debajo de la punta hasta abajo */}
+          <line
+            x1={x1}
+            y1={y1 + tipLen}
+            x2={x1}
+            y2={y2}
+            stroke="#D9B25F"
+            {...base}
+          />
+          {/* punta roja arriba */}
           <line
             x1={x1}
             y1={y1}
             x2={x1}
-            y2={y2 - stroke * 0.7}
-            stroke="#D9B25F"
-            {...base}
-          />
-          <line
-            x1={x1}
-            y1={y2 - stroke * 0.7}
-            x2={x1}
-            y2={y2}
+            y2={y1 + tipLen}
             stroke="#C62828"
             {...base}
           />
         </>
       )}
-
       {/* ARRIBA */}
       {sides.top && (
         <>
@@ -157,9 +159,7 @@ export function SectionBoard({ count }: { count: number }) {
     <div
       className="flex flex-col items-center justify-center"
       style={{
-        background: "rgba(255,255,255,0.08)",
-        borderRadius: 6,
-        padding: 10,
+        padding: 2,
         width: "10rem",
       }}
     >
@@ -188,9 +188,6 @@ export function TeamColumn({
 }) {
   const { teams, increment, decrement } = useTrucoStore();
   const t = teams[teamKey];
-  const total = t.malas + t.buenas;
-
-  console.log({ total });
 
   return (
     <div
@@ -200,7 +197,7 @@ export function TeamColumn({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 14,
+        gap: 10,
       }}
     >
       <div className="flex flex-col text-lg items-center text-white -mb-1">
@@ -212,16 +209,14 @@ export function TeamColumn({
         >
           {label}
         </div>
-        <span className="text-[0.7rem] font-extralight !text-muted-foreground -mt-0.5 text-gray-400">
-          {total} puntos
-        </span>
       </div>
 
       <div
         className="items-center"
-        style={{ display: "flex", flexDirection: "column", gap: 14 }}
+        style={{ display: "flex", flexDirection: "column", gap: 10 }}
       >
         <SectionBoard count={t.malas} />
+        <hr className="w-full block px-10 text-gray-400" />
         <SectionBoard count={t.buenas} />
       </div>
 

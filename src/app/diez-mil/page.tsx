@@ -122,7 +122,12 @@ export default function DiezMilPage() {
 
       <div className="mx-auto w-fit min-w-72">
         <header className="mb-3 flex items-center justify-between gap-3">
-          <h1 className="text-base sm:text-md font-extrabold">🎯 10.000</h1>
+          <h1
+            className="text-base sm:text-md font-extrabold"
+            onClick={() => window.history.back()}
+          >
+            🎯 10.000
+          </h1>
           <div className="flex items-center gap-2">
             <button
               onClick={() => canAdd && addPlayer()}

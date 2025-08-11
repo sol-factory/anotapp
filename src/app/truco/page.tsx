@@ -21,38 +21,39 @@ export default function TrucoPage() {
     >
       <Toaster position="top-center" />
       <WinConfetti />
-      <div className="flex gap-3">
-        <TeamColumn teamKey="us" label="Nosotros" />
-        <TeamColumn teamKey="them" label="Ellos" />
-      </div>
-
-      <div style={{ marginTop: 8 }}>
+      <div className="flex flex-col items-center max-w-72">
+        <header className="w-full flex items-center justify-center mb-6">
+          <h1
+            onClick={() => window.history.back()}
+            className="text-base sm:text-lg font-extrabold text-white"
+          >
+            🗡️ Truco
+          </h1>
+        </header>
+        <div className="flex gap-3">
+          <TeamColumn teamKey="us" label="Nosotros" />
+          <TeamColumn teamKey="them" label="Ellos" />
+        </div>
         <button
           onClick={async () => {
             const result = await confirmWithToast("¿Seguro quiere reiniciar?");
-            console.log({ result });
             if (result) {
               reset();
             }
           }}
           style={resetBtn}
+          className="text-sm mt-5"
         >
           Reiniciar
         </button>
       </div>
-
-      <footer
-        style={{ textAlign: "center", color: "#94a3b8", marginTop: "auto" }}
-      >
-        have-fun • truco
-      </footer>
     </main>
   );
 }
 
 const resetBtn: React.CSSProperties = {
-  width: "100%",
-  padding: "6px 14px",
+  width: "6rem",
+  padding: "2px 3px",
   borderRadius: 12,
   border: "1px solid rgba(255,255,255,0.18)",
   background: "white",
