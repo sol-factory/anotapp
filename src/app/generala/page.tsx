@@ -70,16 +70,16 @@ type CellTarget = { playerId: string; category: CategoryKey } | null;
 export default function GeneralaPage() {
   const { players, scores, addPlayer, setScore, reset } = useGeneralaStore();
   const [target, setTarget] = useState<CellTarget>(null);
+  const [showTotals, setShowTotals] = useState(false); // 👈 oculto por defecto
 
   const openCell = (playerId: string, category: CategoryKey) => {
-    const already = scores[playerId]?.[category];
-    if (already !== null) return;
     setTarget({ playerId, category });
   };
   const closeModal = () => setTarget(null);
+
   const onPick = (v: number | "X") => {
     if (!target) return;
-    setScore(target.playerId, target.category, v as ScoreCell);
+    setScore(target.playerId, target.category, v); // ✔️ sin cast
     setTarget(null);
   };
 
@@ -159,8 +159,7 @@ export default function GeneralaPage() {
                       <td
                         key={p.id}
                         className={[
-                          "px-1 py-1 text-center cursor-pointer select-none text-sm",
-                          val !== null ? "cursor-default" : "hover:bg-white/5",
+                          "px-1 py-1 text-center cursor-pointer select-none text-sm hover:bg-white/5",
                         ].join(" ")}
                         onClick={() => openCell(p.id, cat.key)}
                       >
@@ -173,15 +172,18 @@ export default function GeneralaPage() {
 
               {/* Totales */}
               <tr>
-                <td className="sticky left-0 z-10 bg-slate-900 px-3 py-2 text-sm font-extrabold">
-                  Total
+                <td
+                  className="sticky left-0 z-10 bg-slate-900 px-3 py-2 text-sm font-extrabold cursor-pointer select-none"
+                  onClick={(e) => setShowTotals(!showTotals)}
+                >
+                  {showTotals ? "👁️" : "🫣"} Total
                 </td>
                 {players.map((p) => (
                   <td
                     key={p.id}
                     className="px-1 py-1 text-center text-sm font-extrabold"
                   >
-                    {getTotal(scores, p.id)}
+                    {showTotals ? getTotal(scores, p.id) : "🫣"}
                   </td>
                 ))}
               </tr>

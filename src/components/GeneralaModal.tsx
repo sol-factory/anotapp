@@ -13,12 +13,15 @@ function upperOptions(face: number): Opt[] {
 }
 
 function fixedOptions(
-  kind: Extract<CategoryKey, "escalera" | "full" | "poker" | "generala">
+  kind: Extract<
+    CategoryKey,
+    "escalera" | "full" | "poker" | "generala" | "doble"
+  >
 ): Opt[] {
   const cfg = scoringConfig[kind];
   return [
     { label: String(cfg.normal), value: cfg.normal },
-    { label: `${cfg.served} (servida)`, value: cfg.served },
+    { label: `${cfg.served}`, value: cfg.served },
     { label: "Tachar", value: "X" },
   ];
 }
@@ -41,6 +44,7 @@ export function optionsForCategory(cat: CategoryKey): Opt[] {
     case "full":
     case "poker":
     case "generala":
+    case "doble":
       return fixedOptions(cat);
   }
 }

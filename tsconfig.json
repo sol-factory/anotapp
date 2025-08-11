@@ -10,6 +10,7 @@
     "module": "esnext",
     "noImplicitAny": true,
     "moduleResolution": "bundler",
+    "noUnusedLocals": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",

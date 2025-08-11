@@ -13,7 +13,8 @@ export type CategoryKey =
   | "escalera"
   | "full"
   | "poker"
-  | "generala";
+  | "generala"
+  | "doble";
 
 export const CATEGORY_DEFS: { key: CategoryKey; label: string }[] = [
   { key: "ones", label: "1" },
@@ -26,6 +27,7 @@ export const CATEGORY_DEFS: { key: CategoryKey; label: string }[] = [
   { key: "full", label: "Full" },
   { key: "poker", label: "Poker" },
   { key: "generala", label: "Generala" },
+  { key: "doble", label: "Doble" },
 ];
 
 export type ScoreCell = number | "X" | null;
@@ -63,7 +65,7 @@ const initialScores: Scores = initialPlayers.reduce<Scores>((acc, p) => {
 
 type FixedKind = Extract<
   CategoryKey,
-  "escalera" | "full" | "poker" | "generala"
+  "escalera" | "full" | "poker" | "generala" | "doble"
 >;
 type ScoringConfig = { [K in FixedKind]: { normal: number; served: number } };
 
@@ -71,7 +73,8 @@ export const scoringConfig: ScoringConfig = {
   escalera: { normal: 20, served: 25 },
   full: { normal: 30, served: 35 },
   poker: { normal: 40, served: 45 },
-  generala: { normal: 50, served: 100 }, // ajustá si usás otros valores
+  generala: { normal: 50, served: 100 },
+  doble: { normal: 100, served: 120 }, // ajustá si usás otros valores
 };
 
 export const useGeneralaStore = create<GeneralaState>()(
