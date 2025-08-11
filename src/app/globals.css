@@ -11,7 +11,7 @@
 
 /* utilidades simples */
 .safe-pad {
-  padding-top: max(16px, var(--sat));
+  padding-top: max(24px, var(--sat));
   padding-right: max(16px, var(--sar));
   padding-bottom: max(16px, var(--sab));
   padding-left: max(16px, var(--sal));
