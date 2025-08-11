@@ -46,7 +46,13 @@ export default function Home() {
             href="/generala"
             title="Generala"
             subtitle="Tabla de puntajes"
-            icon={<DiceIcon />}
+            icon={"🎲"}
+          />
+          <GameCard
+            href="/diez-mil"
+            title="10.000"
+            subtitle="Tabla de puntajes"
+            icon={"🎯"}
           />
         </div>
 
