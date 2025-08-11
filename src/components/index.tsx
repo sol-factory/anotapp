@@ -234,7 +234,7 @@ export function SectionBoard({ count }: { count: number }) {
       className="flex flex-col items-center justify-center"
       style={{
         background: "rgba(255,255,255,0.08)",
-        borderRadius: 18,
+        borderRadius: 10,
         padding: 10,
         width: "10rem",
       }}
