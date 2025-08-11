@@ -30,7 +30,7 @@ function EditablePlayerName({ id, name }: { id: string; name: string }) {
   };
 
   return (
-    <div className="flex items-center gap-2 text-center justify-center safe-pad ">
+    <div className="flex items-center gap-2 text-center justify-center">
       {editing ? (
         <input
           autoFocus
@@ -94,7 +94,7 @@ export default function GeneralaPage() {
   const canAdd = players.length < 6;
 
   return (
-    <main className="pt-16 min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p-4">
+    <main className="safe-pad min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p-4">
       <div className="mx-auto w-fit min-w-72">
         <header className="mb-3 flex items-center justify-between">
           <h1
@@ -120,7 +120,7 @@ export default function GeneralaPage() {
           </div>
         </header>
 
-        <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-800 px-3 py-1">
+        <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-800 px-3 py-3">
           <table className="table-fixed border-collapse w-16">
             {/* columnas: jugada ancha + jugadores ultra finitos */}
             <colgroup>
@@ -132,11 +132,11 @@ export default function GeneralaPage() {
 
             <thead>
               <tr className="bg-slate-800/60">
-                <th className="sticky left-0 z-10 bg-slate-800/60 px-3 py-2 text-left text-xs">
+                <th className="sticky left-0 z-10 bg-slate-800/60 px-3 text-left text-xs">
                   Jugada
                 </th>
                 {players.map((p) => (
-                  <th key={p.id} className="px-1.5 py-1 text-left">
+                  <th key={p.id} className="px-1.5 py-0 text-left">
                     <EditablePlayerName id={p.id} name={p.name} />
                   </th>
                 ))}
@@ -175,17 +175,21 @@ export default function GeneralaPage() {
               ))}
 
               {/* Totales */}
-              <tr>
+
+              <tr
+                onClick={() => setShowTotals(!showTotals)}
+                className="cursor-pointer"
+              >
                 <td
-                  className="sticky left-0 z-10 bg-slate-900 px-3 py-2 text-sm font-extrabold cursor-pointer select-none"
-                  onClick={(e) => setShowTotals(!showTotals)}
+                  className="sticky left-0 z-10 px-3 py-2 text-sm font-extrabold select-none border-t-1 border-slate-700"
+                  onClick={() => setShowTotals(!showTotals)}
                 >
                   {showTotals ? "👁️" : "🫣"} Total
                 </td>
                 {players.map((p) => (
                   <td
                     key={p.id}
-                    className="px-1 py-1 text-center text-sm font-extrabold"
+                    className="px-1 py-1 text-center text-sm font-extrabold border-t-1 border-slate-700"
                   >
                     {showTotals ? getTotal(scores, p.id) : "🫣"}
                   </td>
