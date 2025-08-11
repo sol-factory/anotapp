@@ -40,7 +40,7 @@ export default function Home() {
             href="/truco"
             title="Truco"
             subtitle="Anotador con fósforos"
-            icon={<CardIcon />}
+            icon={"🗡️"}
           />
           <GameCard
             href="/generala"
@@ -84,7 +84,7 @@ function GameCard({
       className="group w-72 rounded-2xl border border-white/10 bg-white/5 p-4 hover:bg-white/10 transition-shadow shadow-[inset_0_1px_0_rgba(255,255,255,.04)]
       flex items-center gap-4"
     >
-      <div className="h-12 w-12 rounded-xl bg-white text-slate-900 grid place-items-center shadow-md">
+      <div className="h-12 w-12 text-3xl rounded-xl text-slate-900 grid place-items-center shadow-md">
         {icon}
       </div>
       <div className="min-w-0">
