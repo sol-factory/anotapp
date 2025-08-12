@@ -43,7 +43,7 @@ export default function TrucoPage() {
             }
           }}
           style={resetBtn}
-          className="text-sm mt-5"
+          className="text-sm mt-16"
         >
           Reiniciar
         </button>
