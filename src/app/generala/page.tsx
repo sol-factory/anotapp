@@ -7,7 +7,7 @@ import {
   CategoryKey,
   getTotal,
 } from "@/hooks/use-generala-store";
-import GeneralaModal, { optionsForCategory } from "@/components/GeneralaModal";
+import { optionsForCategory } from "@/components/GeneralaModal";
 import PlayerEditModal, { PlayerRef } from "@/components/PlayerEditModal";
 
 type CellTarget = { playerId: string; category: CategoryKey } | null;
@@ -163,14 +163,8 @@ export default function GeneralaPage() {
       </div>
 
       {/* Modal de opciones */}
-      <GeneralaModal
-        open={!!target}
-        onClose={closeModal}
-        title={modalTitle}
-        onPick={onPick}
-      />
       {target && (
-        <div className="fixed inset-0 z-[60] grid place-items-center pointer-events-none">
+        <div className="fixed inset-0 z-[60] grid justify-items-center items-start pt-20 pointer-events-none">
           <div className="pointer-events-auto w-[320px] rounded-xl bg-white p-4 shadow-2xl">
             <div className="mb-3 text-center text-slate-900 font-extrabold">
               {modalTitle}
@@ -179,7 +173,9 @@ export default function GeneralaPage() {
               {optionsForCategory(target.category).map((opt) => (
                 <button
                   key={opt.label}
-                  className="rounded-md border border-slate-200 bg-white px-3 py-2 font-bold text-slate-900 hover:bg-slate-50"
+                  className={`rounded-md border border-slate-200 bg-white px-3 py-2 font-bold ${
+                    opt.value === "X" ? "text-red-600" : "text-slate-900"
+                  } hover:bg-slate-50`}
                   onClick={() => onPick(opt.value)}
                 >
                   {opt.label}
@@ -187,10 +183,16 @@ export default function GeneralaPage() {
               ))}
             </div>
             <button
-              className="mt-3 w-full rounded-md border border-slate-200 bg-white px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50"
+              className="mt-5 w-full rounded-md border border-slate-200 bg-white px-3 py-2 font-semibold text-red-600 hover:bg-slate-50"
+              onClick={() => onPick(null)}
+            >
+              Borrar
+            </button>
+            <button
+              className="mt-1.5 w-full rounded-md border border-slate-200 bg-white px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50"
               onClick={closeModal}
             >
-              Cancelar
+              Cerrar
             </button>
           </div>
         </div>

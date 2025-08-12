@@ -8,8 +8,7 @@ function upperOptions(face: number): Opt[] {
   const opts: Opt[] = [];
   for (let k = 1; k <= 5; k++)
     opts.push({ label: String(k * face), value: k * face });
-  opts.push({ label: "Tachar", value: "X" });
-  opts.push({ label: "Borrar", value: null });
+  opts.push({ label: "X", value: "X" });
   return opts;
 }
 
@@ -23,7 +22,7 @@ function fixedOptions(
   return [
     { label: String(cfg.normal), value: cfg.normal },
     { label: `${cfg.served}`, value: cfg.served },
-    { label: "Tachar", value: "X" },
+    { label: "X", value: "X" },
   ];
 }
 
@@ -54,10 +53,9 @@ type Props = {
   open: boolean;
   onClose: () => void;
   title: string;
-  onPick: (value: number | "X") => void;
 };
 
-export default function GeneralaModal({ open, onClose, title, onPick }: Props) {
+export default function GeneralaModal({ open, onClose, title }: Props) {
   if (!open) return null;
   // Este modal es un contenedor “dumb”; las opciones se renderizan desde la página.
   return (
