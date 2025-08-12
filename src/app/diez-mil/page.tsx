@@ -50,7 +50,7 @@ export default function DiezMilPage() {
   };
 
   return (
-    <main className="min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p-4 safe-pad">
+    <main className="min-h-dvh bg-slate-900 text-slate-100 safe-pad">
       <Toaster position="top-center" />
       <WinConfettiDiezMil />
 

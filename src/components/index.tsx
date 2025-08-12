@@ -246,61 +246,122 @@ export function TeamColumn({
 }
 
 /* ------- menos confetti, en 1 ráfaga + 2 mini pulses ------- */
+
 export function confirmWithToast(message: string): Promise<boolean> {
   return new Promise((resolve) => {
+    let handled = false;
+
+    const cleanup = () => {
+      try {
+        document.documentElement.style.overflow = "";
+      } catch {}
+      window.removeEventListener("keydown", onKeyDown);
+    };
+
+    const close = (val: boolean) => {
+      if (handled) return;
+      handled = true;
+      toast.remove(id); // cierra sin animación
+      cleanup();
+      resolve(val);
+    };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close(false);
+    };
+    window.addEventListener("keydown", onKeyDown, { once: true });
+
+    // bloqueamos scroll del fondo
+    try {
+      document.documentElement.style.overflow = "hidden";
+    } catch {}
+
     const id = toast.custom(
-      (t) => (
-        <div
-          className="flex flex-col"
-          style={{
-            background: "white",
-            color: "#0f172a",
-            borderRadius: 12,
-            padding: "12px",
-            boxShadow: "0 10px 30px rgba(0,0,0,.15)",
-            width: 280,
-            gap: 10,
-          }}
-        >
-          <div style={{ fontWeight: 700, textAlign: "center" }}>{message}</div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <button
-              onClick={() => {
-                toast.remove(id);
-                resolve(true);
-              }}
+      () => (
+        <>
+          <div
+            onClick={() => close(false)}
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 1,
+              background: "rgba(0,0,0,.45)",
+              backdropFilter: "blur(2px)",
+              pointerEvents: "auto",
+              marginTop: "-26px",
+              marginLeft: "-16px",
+              height: "3000px",
+              width: "3000px",
+            }}
+          />
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              display: "grid",
+              placeItems: "center",
+              zIndex: 9999,
+              pointerEvents: "none",
+              padding:
+                "max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left))",
+            }}
+            className="mt-10"
+          >
+            {/* overlay clickeable */}
+
+            {/* card */}
+            <div
+              className="flex flex-col"
               style={{
-                flex: 1,
-                background: "#0f172a",
-                color: "white",
-                borderRadius: 8,
-                padding: "8px 10px",
-                fontWeight: 700,
-              }}
-            >
-              Sí, reiniciar
-            </button>
-            <button
-              onClick={() => {
-                toast.remove(id);
-                resolve(false);
-              }}
-              style={{
-                flex: 1,
-                background: "transparent",
+                pointerEvents: "auto",
+                background: "white",
                 color: "#0f172a",
-                border: "1px solid #cbd5e1",
-                borderRadius: 8,
-                padding: "8px 10px",
-                fontWeight: 700,
+                borderRadius: 12,
+                padding: 12,
+                boxShadow: "0 10px 30px rgba(0,0,0,.15)",
+                width: 280,
+                gap: 10,
               }}
+              role="dialog"
+              aria-modal="true"
             >
-              Cancelar
-            </button>
+              <div style={{ fontWeight: 700, textAlign: "center" }}>
+                {message}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <button
+                  onClick={() => close(true)}
+                  style={{
+                    flex: 1,
+                    background: "#0f172a",
+                    color: "white",
+                    borderRadius: 8,
+                    padding: "8px 10px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Sí, reiniciar
+                </button>
+                <button
+                  onClick={() => close(false)}
+                  style={{
+                    flex: 1,
+                    background: "transparent",
+                    color: "#0f172a",
+                    border: "1px solid #cbd5e1",
+                    borderRadius: 8,
+                    padding: "8px 10px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        </>
       ),
-      { duration: 1000 * 60 } // queda hasta que respondas
+      { duration: Infinity }
     );
   });
 }
