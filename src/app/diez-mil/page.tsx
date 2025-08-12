@@ -49,6 +49,10 @@ export default function DiezMilPage() {
     } catch {}
   };
 
+  const current = target ? turns[target.playerId]?.[target.turnIndex] ?? 0 : 0;
+  const total = target ? getTotalDiezMil(turns, target.playerId) : 0;
+  const sumBefore = total - current;
+
   return (
     <main className="min-h-dvh bg-slate-900 text-slate-100 safe-pad">
       <Toaster position="top-center" />
@@ -172,7 +176,7 @@ export default function DiezMilPage() {
                           ].join(" ")}
                           onClick={() =>
                             setTarget({ playerId: p.id, turnIndex: rowIndex })
-                          } // 👈 anotar desde arriba
+                          }
                           title="Agregar puntaje"
                         >
                           {content}
@@ -213,6 +217,8 @@ export default function DiezMilPage() {
             : ""
         }
         onPick={onPick}
+        initialValue={current}
+        sumBefore={sumBefore} // 👈 NUEVO
       />
       <PlayerEditModal
         open={!!editingPlayer}

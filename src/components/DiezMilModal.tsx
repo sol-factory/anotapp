@@ -1,42 +1,25 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 
 const QUICK: number[] = [
-  -100, // 👈 negativo destacado
-  0,
-  50,
-  100,
-  150,
-  200,
-  250,
-  300,
-  350,
-  400,
-  450,
-  500,
-  600,
-  700,
-  750,
-  800,
-  900,
-  1000,
-  1200,
-  1500,
+  -100, 0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 750, 800,
+  900, 1000, 1200, 1500,
 ];
 
-export default function DiezMilModal({
+export default function TenMilModal({
   open,
   title,
   onPick,
   onClose,
   initialValue,
+  sumBefore, // 👈 suma del jugador sin esta celda
 }: {
   open: boolean;
   title: string;
   onPick: (value: number) => void;
   onClose: () => void;
   initialValue?: number | null;
+  sumBefore: number; // 👈 NUEVO
 }) {
   const [val, setVal] = useState<string>(
     initialValue != null ? String(initialValue) : ""
@@ -52,8 +35,18 @@ export default function DiezMilModal({
 
   if (!open) return null;
 
+  const maxNew = 10000 - sumBefore; // valor máximo que puedo guardar en esta celda
   const num = Number(val);
-  const canSave = Number.isFinite(num); // 👈 permitimos negativos
+  const isNum = Number.isFinite(num);
+  const exceeds = isNum && num > maxNew; // ¿me paso?
+  const canSave = isNum && !exceeds; // guardo solo si no me paso
+  const helper = isNum
+    ? exceeds
+      ? `Te pasás por ${num - maxNew}`
+      : maxNew >= 0
+      ? `Te faltan ${maxNew - num}`
+      : `Ya superaste 10.000, solo podés restar`
+    : "";
 
   return (
     <div className="fixed inset-0 z-50 grid justify-items-center items-start pt-20">
@@ -64,20 +57,28 @@ export default function DiezMilModal({
         </div>
 
         <div className="grid grid-cols-4 gap-2 mb-3">
-          {QUICK.map((q) => (
-            <button
-              key={q}
-              className={[
-                "rounded-md border px-2 py-1.5 text-sm font-bold hover:bg-slate-50",
-                q < 0
-                  ? "border-red-300 text-red-600"
-                  : "border-slate-200 text-slate-900 bg-white",
-              ].join(" ")}
-              onClick={() => onPick(q)}
-            >
-              {q}
-            </button>
-          ))}
+          {QUICK.map((q) => {
+            const disabled = q > maxNew; // negativos siempre ok; positivos > maxNew, bloqueados
+            return (
+              <button
+                key={q}
+                disabled={disabled}
+                className={[
+                  "rounded-md border px-2 py-1.5 text-sm font-bold",
+                  q < 0
+                    ? "border-red-300 text-red-600 bg-white"
+                    : "border-slate-200 text-slate-900 bg-white",
+                  disabled
+                    ? "opacity-40 cursor-not-allowed"
+                    : "hover:bg-slate-50",
+                ].join(" ")}
+                onClick={() => onPick(q)}
+                title={disabled ? "Supera 10.000" : undefined}
+              >
+                {q}
+              </button>
+            );
+          })}
         </div>
 
         <div className="flex gap-2">
@@ -87,8 +88,11 @@ export default function DiezMilModal({
             step={50}
             value={val}
             onChange={(e) => setVal(e.target.value)}
-            className="flex-1 !w-52 rounded-md border border-slate-300 px-3 py-2 text-slate-900 outline-none"
-            placeholder="Ej: -100, 1150"
+            className={[
+              "flex-1 !w-52 rounded-md border px-3 py-2 text-slate-900 outline-none",
+              exceeds ? "border-red-400" : "border-slate-300",
+            ].join(" ")}
+            placeholder={maxNew >= 0 ? `Máx ${maxNew}` : "Solo negativos"}
             onKeyDown={(e) => {
               if (e.key === "Enter" && canSave) onPick(num);
               if (e.key === "Escape") onClose();
@@ -101,6 +105,18 @@ export default function DiezMilModal({
           >
             Guardar
           </button>
+        </div>
+
+        <div className="mt-2 text-xs text-center">
+          {helper && (
+            <span
+              className={
+                exceeds ? "text-red-600 font-semibold" : "text-green-600"
+              }
+            >
+              {helper}
+            </span>
+          )}
         </div>
 
         <button
