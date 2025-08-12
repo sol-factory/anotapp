@@ -56,7 +56,7 @@ export default function DiezMilModal({
   const canSave = Number.isFinite(num); // 👈 permitimos negativos
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center">
+    <div className="fixed inset-0 z-50 grid justify-items-center items-start pt-20">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div className="relative z-10 w-[320px] rounded-xl bg-white p-4 shadow-2xl">
         <div className="mb-3 text-center text-slate-900 font-extrabold">
@@ -69,7 +69,7 @@ export default function DiezMilModal({
               key={q}
               className={[
                 "rounded-md border px-2 py-1.5 text-sm font-bold hover:bg-slate-50",
-                q === -100
+                q < 0
                   ? "border-red-300 text-red-600"
                   : "border-slate-200 text-slate-900 bg-white",
               ].join(" ")}

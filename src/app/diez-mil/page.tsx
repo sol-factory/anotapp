@@ -150,11 +150,11 @@ export default function DiezMilPage() {
                         val != null ? (
                           <span
                             className={
-                              val === -100
+                              val < 0
                                 ? "font-bold text-red-400"
                                 : val === 0
                                 ? "text-gray-600"
-                                : "font-bold"
+                                : "font-semibold"
                             }
                           >
                             {val}
