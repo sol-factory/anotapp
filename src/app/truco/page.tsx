@@ -8,21 +8,10 @@ export default function TrucoPage() {
   const { reset } = useTrucoStore();
 
   return (
-    <main
-      className="safe-pad"
-      style={{
-        minHeight: "100dvh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 24,
-        padding: 20,
-        background: "#0b1220",
-      }}
-    >
+    <main className="safe-pad min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p">
       <Toaster position="top-center" />
       <WinConfetti />
-      <div className="flex flex-col items-center max-w-72">
+      <div className="flex flex-col items-center max-w-72 mx-auto">
         <header className="w-full flex items-center justify-center mb-6">
           <h1
             onClick={() => window.history.back()}

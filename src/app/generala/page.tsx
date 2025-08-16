@@ -50,7 +50,7 @@ export default function GeneralaPage() {
   const canAdd = players.length < 6;
 
   return (
-    <main className="safe-pad min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p-4">
+    <main className="safe-pad min-h-dvh bg-slate-900 text-slate-100 p-3 sm:p-4 overflow-scroll">
       <div className="mx-auto w-fit min-w-72">
         <header className="mb-3 flex items-center justify-between">
           <h1
