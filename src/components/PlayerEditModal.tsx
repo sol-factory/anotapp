@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type PlayerRef = { id: string; name: string };
 
@@ -18,9 +18,20 @@ export default function PlayerEditModal({
   onRemove: (id: string) => void;
 }) {
   const [val, setVal] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (open && player) setVal(player.name);
+    if (open && player) {
+      setVal(player.name);
+
+      // foco + selección total (robusto en desktop y mobile)
+      setTimeout(() => {
+        const el = inputRef.current;
+        if (!el) return;
+        el.focus();
+        el.select();
+      }, 100);
+    }
   }, [open, player]);
 
   if (!open || !player) return null;
@@ -39,7 +50,7 @@ export default function PlayerEditModal({
   return (
     <div className="fixed inset-0 z-50 grid justify-items-center items-start pt-20">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative  z-10 w-[320px] rounded-xl bg-white p-4 shadow-2xl">
+      <div className="relative z-10 w-[320px] rounded-xl bg-white p-4 shadow-2xl">
         <div className="mb-3 text-center text-slate-900 font-extrabold">
           Editar jugador
         </div>
@@ -48,7 +59,7 @@ export default function PlayerEditModal({
           Nombre
         </label>
         <input
-          autoFocus
+          ref={inputRef}
           value={val}
           onChange={(e) => setVal(e.target.value.slice(0, 16))}
           onKeyDown={(e) => {
