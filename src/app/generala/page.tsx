@@ -9,6 +9,7 @@ import {
 } from "@/hooks/use-generala-store";
 import { optionsForCategory } from "@/components/GeneralaModal";
 import PlayerEditModal, { PlayerRef } from "@/components/PlayerEditModal";
+import GeneralaEvolutionChart from "@/components/GeneralaEvolutionChart";
 
 type CellTarget = { playerId: string; category: CategoryKey } | null;
 
@@ -17,6 +18,7 @@ export default function GeneralaPage() {
     players,
     scores,
     addPlayer,
+    history,
     setScore,
     reset,
     renamePlayer,
@@ -204,6 +206,9 @@ export default function GeneralaPage() {
         onRename={renamePlayer}
         onRemove={removePlayer}
       />
+      <div className="flex items-center justify-center mt-3 mb-3 max-w-full w-full">
+        <GeneralaEvolutionChart players={players} history={history} />
+      </div>
     </main>
   );
 }

@@ -32,6 +32,15 @@ export const CATEGORY_DEFS: { key: CategoryKey; label: string }[] = [
 
 export type ScoreCell = number | "X" | null;
 
+export type GeneralaHistoryEvent = {
+  id: string; // uuid
+  at: number; // Date.now()
+  playerId: string;
+  category: CategoryKey;
+  value: ScoreCell;
+  prev: ScoreCell;
+};
+
 export type Player = { id: string; name: string };
 
 export type ScoreRow = Record<CategoryKey, ScoreCell>;
@@ -40,6 +49,10 @@ type Scores = Record<string, ScoreRow>;
 type GeneralaState = {
   players: Player[];
   scores: Scores;
+
+  // ✅ NUEVO: historial de cargas (steps reales)
+  history: GeneralaHistoryEvent[];
+
   addPlayer: (name?: string) => void;
   removePlayer: (id: string) => void;
   renamePlayer: (id: string, name: string) => void;
@@ -83,19 +96,25 @@ export const useGeneralaStore = create<GeneralaState>()(
       players: initialPlayers,
       scores: initialScores,
 
+      // ✅ NUEVO
+      history: [],
+
       addPlayer: (name) => {
         const { players, scores } = get();
         if (players.length >= 6) return;
+
         const id = `p${Date.now().toString(36)}`;
         const newPlayer: Player = {
           id,
           name: name?.trim() || `Jugador ${players.length + 1}`,
         };
+
         set({
           players: [...players, newPlayer],
           scores: { ...scores, [id]: emptyRow() },
         });
       },
+
       renamePlayer: (id, name) => {
         set((state) => ({
           players: state.players.map((p) =>
@@ -105,19 +124,40 @@ export const useGeneralaStore = create<GeneralaState>()(
       },
 
       removePlayer: (id) => {
-        const { players, scores } = get();
+        const { players, scores, history } = get();
         const nextPlayers = players.filter((p) => p.id !== id);
         const { [id]: _omit, ...rest } = scores;
-        set({ players: nextPlayers, scores: rest });
+
+        // opcional pero recomendable: eliminar eventos del jugador borrado
+        const nextHistory = history.filter((ev) => ev.playerId !== id);
+
+        set({ players: nextPlayers, scores: rest, history: nextHistory });
       },
 
       setScore: (playerId, category, value) => {
-        const { scores } = get();
+        const { scores, history } = get();
+        const prev: ScoreCell = scores[playerId]?.[category] ?? null;
+
+        // si querés evitar “eventos basura” cuando no cambia nada:
+        if (prev === value) return;
+
+        const nextScores: Scores = {
+          ...scores,
+          [playerId]: { ...scores[playerId], [category]: value },
+        };
+
+        const ev: GeneralaHistoryEvent = {
+          id: crypto.randomUUID(),
+          at: Date.now(),
+          playerId,
+          category,
+          value,
+          prev,
+        };
+
         set({
-          scores: {
-            ...scores,
-            [playerId]: { ...scores[playerId], [category]: value },
-          },
+          scores: nextScores,
+          history: [...history, ev],
         });
       },
 
@@ -127,13 +167,23 @@ export const useGeneralaStore = create<GeneralaState>()(
             acc[p.id] = emptyRow();
             return acc;
           }, {} as Scores);
-          return { scores: freshScores }; // <-- mantiene players tal cual están
+
+          return {
+            scores: freshScores, // mantiene players tal cual
+            history: [], // ✅ limpia steps
+          };
         }),
     }),
     {
       name: "have-fun:generala",
       storage: createJSONStorage(() => localStorage),
-      partialize: (s) => ({ players: s.players, scores: s.scores }),
+
+      // ✅ persistimos history también
+      partialize: (s) => ({
+        players: s.players,
+        scores: s.scores,
+        history: s.history,
+      }),
     }
   )
 );
