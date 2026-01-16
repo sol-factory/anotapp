@@ -29,22 +29,22 @@ export default function TenMilModal({
   useEffect(() => {
     if (open) {
       setVal(initialValue != null ? String(initialValue) : "");
-      setTimeout(() => inputRef.current?.focus(), 0);
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [open, initialValue]);
 
   if (!open) return null;
 
   const maxNew = 10000 - sumBefore; // valor máximo que puedo guardar en esta celda
-  const num = Number(val);
+  const num = +val > 0 ? Number(val) : null;
   const isNum = Number.isFinite(num);
-  const exceeds = isNum && num > maxNew; // ¿me paso?
+  const exceeds = isNum && Number(num) > maxNew; // ¿me paso?
   const canSave = isNum && !exceeds; // guardo solo si no me paso
   const helper = isNum
     ? exceeds
-      ? `Te pasás por ${num - maxNew}`
+      ? `Te pasás por ${Number(num) - maxNew}`
       : maxNew >= 0
-      ? `Te faltan ${maxNew - num}`
+      ? `Te faltan ${maxNew - Number(num)}`
       : `Ya superaste 10.000, solo podés restar`
     : "";
 
@@ -94,13 +94,13 @@ export default function TenMilModal({
             ].join(" ")}
             placeholder={maxNew >= 0 ? `Máx ${maxNew}` : "Solo negativos"}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && canSave) onPick(num);
+              if (e.key === "Enter" && canSave) onPick(Number(num));
               if (e.key === "Escape") onClose();
             }}
           />
           <button
             disabled={!canSave}
-            onClick={() => onPick(num)}
+            onClick={() => onPick(Number(num))}
             className="rounded-md bg-slate-900 px-3 py-2 text-white font-extrabold disabled:opacity-40"
           >
             Guardar
