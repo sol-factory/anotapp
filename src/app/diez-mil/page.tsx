@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { confirmWithToast } from "@/components";
 import WinConfettiDiezMil from "@/components/WinConfettiDiezMil";
 import PlayerEditModal, { PlayerRef } from "@/components/PlayerEditModal";
+import DiezMilEvolutionChart from "@/components/DiezMilEvolutionChart";
 
 /* Editable header name (angostito) */
 
@@ -83,7 +84,7 @@ export default function DiezMilPage() {
           </div>
         </header>
 
-        <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-800 px-3 py-1">
+        <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-800 px-3 py-1 max-h-96">
           <table className="table-fixed border-collapse w-16">
             <colgroup>
               <col style={{ width: 70 }} />
@@ -227,6 +228,12 @@ export default function DiezMilPage() {
         onRename={renamePlayer}
         onRemove={removePlayer}
       />
+
+      <div className="mx-auto w-fit min-w-72 mt-5 max-w-full">
+        <div className="mb-3">
+          <DiezMilEvolutionChart players={players} turns={turns} />
+        </div>
+      </div>
     </main>
   );
 }

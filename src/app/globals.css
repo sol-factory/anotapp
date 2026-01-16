@@ -39,6 +39,17 @@
   }
 }
 
+@layer base {
+  :root {
+    --chart-1: 221 83% 53%;
+    --chart-2: 142 71% 45%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 0 84% 60%;
+    --chart-5: 262 83% 58%;
+    --chart-6: 199 89% 48%;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
