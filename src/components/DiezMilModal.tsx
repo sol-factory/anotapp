@@ -29,7 +29,12 @@ export default function TenMilModal({
   useEffect(() => {
     if (open) {
       setVal(initialValue != null ? String(initialValue) : "");
-      setTimeout(() => inputRef.current?.focus(), 100);
+      setTimeout(() => {
+        const el = inputRef.current;
+        if (!el) return;
+        el.focus();
+        el.select(); // 👈 selecciona todo
+      }, 100);
     }
   }, [open, initialValue]);
 

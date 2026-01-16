@@ -84,7 +84,7 @@ export default function DiezMilPage() {
           </div>
         </header>
 
-        <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-800 px-3 py-1 max-h-96">
+        <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-800 px-3 py-1 max-h-96 no-scrollbar">
           <table className="table-fixed border-collapse w-16">
             <colgroup>
               <col style={{ width: 70 }} />

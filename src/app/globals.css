@@ -9,6 +9,52 @@
   --sal: env(safe-area-inset-left);
 }
 
+/* Ocultar scrollbar sin deshabilitar scroll */
+html,
+body {
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE / Edge viejo */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none; /* Chrome, Safari */
+}
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    width: 0 !important; /* Chrome/Safari/Opera */
+    height: 0 !important;
+  }
+
+  /* Mostrar scrollbar (opuesto) */
+  .show-scrollbar {
+    -ms-overflow-style: auto; /* IE/Edge */
+    scrollbar-width: auto; /* Firefox */
+  }
+  .show-scrollbar::-webkit-scrollbar {
+    width: 6px; /* Elegí un tamaño visible */
+    height: 6px;
+  }
+
+  /* (Opcional) estilos básicos para que se note */
+  .show-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 9999px;
+    padding: 2px;
+  }
+  .show-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
 /* utilidades simples */
 .safe-pad {
   padding-top: max(24px, var(--sat));
