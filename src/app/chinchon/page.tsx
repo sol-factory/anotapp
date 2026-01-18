@@ -134,7 +134,7 @@ export default function ChinchonPage() {
 
                           {/* si está cerca de 100, mostramos lo que falta */}
                           {remaining <= 25 && remaining > 0 && (
-                            <span className="text-[8px] text-green-400 font-extralight">
+                            <span className="text-[8px] text-red-400 font-extralight">
                               {remaining}
                             </span>
                           )}
@@ -174,9 +174,9 @@ export default function ChinchonPage() {
                           <span
                             className={
                               val < 0
-                                ? "font-bold text-red-400"
+                                ? "font-bold text-emerald-400"
                                 : val === 0
-                                ? "text-white/80"
+                                ? "text-blue-400 font-semibold"
                                 : "font-semibold"
                             }
                           >

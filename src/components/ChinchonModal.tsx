@@ -19,8 +19,6 @@ export default function ChinchonModal({
   title = "Puntaje",
   onPick,
   initialValue = 0,
-  sumBefore = 0,
-  targetScore = 100,
 }: Props) {
   const [value, setValue] = useState<number>(initialValue ?? 0);
 
@@ -28,10 +26,13 @@ export default function ChinchonModal({
     if (open) setValue(initialValue ?? 0);
   }, [open, initialValue]);
 
-  const after = (sumBefore ?? 0) + (value ?? 0);
-  const remaining = targetScore - after;
-
-  const quick = useMemo(() => [0, 5, 10, 15, 20, 25, 30], []);
+  const quick = useMemo(
+    () => [
+      -10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+      20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+    ],
+    []
+  );
 
   const clamp = (n: number) => {
     if (Number.isNaN(n)) return 0;
@@ -94,40 +95,9 @@ export default function ChinchonModal({
                 onClick={() => onPick(n)}
                 className="rounded-lg bg-white/10 px-3 py-1.5 text-xs font-bold hover:bg-white/20"
               >
-                +{n}
+                {n}
               </button>
             ))}
-          </div>
-
-          <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-3">
-            <div className="flex items-center justify-between text-xs text-white/70">
-              <span>Antes</span>
-              <span className="font-semibold text-white/90">{sumBefore}</span>
-            </div>
-            <div className="flex items-center justify-between text-xs text-white/70 mt-1">
-              <span>Este turno</span>
-              <span className="font-semibold text-white/90">
-                {clamp(value)}
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-xs text-white/70 mt-1">
-              <span>Total</span>
-              <span className="font-extrabold text-white">{after}</span>
-            </div>
-
-            <div className="mt-2 flex items-center justify-between text-[10px]">
-              <span className="text-white/60">Objetivo</span>
-              <span
-                className={[
-                  "font-semibold",
-                  remaining > 0 ? "text-green-400" : "text-red-400",
-                ].join(" ")}
-              >
-                {remaining > 0
-                  ? `Faltan ${remaining}`
-                  : `Se pasó por ${Math.abs(remaining)}`}
-              </span>
-            </div>
           </div>
 
           <div className="mt-4 flex gap-2">
