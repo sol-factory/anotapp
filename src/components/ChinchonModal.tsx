@@ -107,7 +107,7 @@ export default function ChinchonModal({
               -10
             </button>
           </div>
-          <div className="mt-4 grid grid-cols-4 gap-3">
+          <div className="mt-4 grid grid-cols-4 gap-1">
             {decades.map((group, idx) => (
               <div key={idx} className="flex flex-col gap-1">
                 {group.values.map((n) => (
