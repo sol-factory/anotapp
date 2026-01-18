@@ -54,6 +54,12 @@ export default function Home() {
             subtitle="Tabla de puntajes"
             icon={"🎯"}
           />
+          <GameCard
+            href="/chinchon"
+            title="Chinchón"
+            subtitle="Tabla de puntajes"
+            icon={"🃏"}
+          />
         </div>
 
         {/* Espacio para más juegos a futuro */}

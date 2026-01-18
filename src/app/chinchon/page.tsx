@@ -1,19 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { useDiezMilStore, getTotalDiezMil } from "@/hooks/use-diezmil-store";
-import DiezMilModal from "@/components/DiezMilModal";
+import {
+  useChinchonStore,
+  getTotalChinchon,
+  TARGET_CHINCHON,
+} from "@/hooks/use-chinchon-store";
 import { Toaster } from "react-hot-toast";
 import { confirmWithToast } from "@/components";
-import WinConfettiDiezMil from "@/components/WinConfettiDiezMil";
 import PlayerEditModal, { PlayerRef } from "@/components/PlayerEditModal";
-import DiezMilEvolutionChart from "@/components/DiezMilEvolutionChart";
+import WinConfettiDiezMil from "@/components/WinConfettiDiezMil";
+import ChinchonEvolutionChart from "@/components/ChinchonEvolutionChart";
+import ChinchonModal from "@/components/ChinchonModal";
 
 /* Editable header name (angostito) */
 
 type Target = { playerId: string; turnIndex: number } | null;
 
-export default function DiezMilPage() {
+export default function ChinchonPage() {
   const {
     players,
     turns,
@@ -22,7 +26,7 @@ export default function DiezMilPage() {
     setScoreAt,
     reset,
     renamePlayer,
-  } = useDiezMilStore();
+  } = useChinchonStore();
 
   const [target, setTarget] = useState<Target>(null);
   const [editingPlayer, setEditingPlayer] = useState<PlayerRef | null>(null);
@@ -39,19 +43,18 @@ export default function DiezMilPage() {
 
   const onReset = async () => {
     const ok = await confirmWithToast(
-      "¿Seguro que querés reiniciar la partida de 10.000?"
+      "¿Seguro que querés reiniciar la partida de Chinchón?"
     );
     if (!ok) return;
     reset();
     try {
-      useDiezMilStore.persist?.clearStorage?.();
-
-      useDiezMilStore.persist?.rehydrate?.();
+      useChinchonStore.persist?.clearStorage?.();
+      useChinchonStore.persist?.rehydrate?.();
     } catch {}
   };
 
   const current = target ? turns[target.playerId]?.[target.turnIndex] ?? 0 : 0;
-  const total = target ? getTotalDiezMil(turns, target.playerId) : 0;
+  const total = target ? getTotalChinchon(turns, target.playerId) : 0;
   const sumBefore = total - current;
 
   return (
@@ -65,8 +68,9 @@ export default function DiezMilPage() {
             className="text-base sm:text-md font-extrabold cursor-pointer"
             onClick={() => window.history.back()}
           >
-            🎯 10.000
+            🃏 Chinchón
           </h1>
+
           <div className="flex items-center gap-2">
             <button
               onClick={() => canAdd && addPlayer()}
@@ -98,52 +102,59 @@ export default function DiezMilPage() {
                 <th className="sticky left-0 z-10 bg-slate-800/60 px-3 py-2 text-left text-sm">
                   Turno
                 </th>
-                {players.map((p) => (
-                  <th
-                    key={p.id}
-                    className="px-1.5 py-1 text-left align-text-top"
-                  >
-                    <div className="flex flex-col items-center gap-1">
-                      <button
-                        onClick={() => setEditingPlayer(p)}
-                        className="mx-auto cursor-pointer block w-[66px] truncate text-center text-sm font-bold text-white/90 hover:text-white"
-                        title="Editar jugador"
-                      >
-                        {p.name}
-                      </button>
 
-                      <div className="flex flex-col items-center">
-                        <span
-                          className={`text-sm ${
-                            getTotalDiezMil(turns, p.id) >= 0
-                              ? "text-blue-400"
-                              : "text-red-400"
-                          } font-semibold`}
+                {players.map((p) => {
+                  const t = getTotalChinchon(turns, p.id);
+                  const remaining = TARGET_CHINCHON - t;
+
+                  return (
+                    <th
+                      key={p.id}
+                      className="px-1.5 py-1 text-left align-text-top"
+                    >
+                      <div className="flex flex-col items-center gap-1">
+                        <button
+                          onClick={() => setEditingPlayer(p)}
+                          className="mx-auto cursor-pointer block w-[66px] truncate text-center text-sm font-bold text-white/90 hover:text-white"
+                          title="Editar jugador"
                         >
-                          {getTotalDiezMil(turns, p.id)}
-                        </span>
-                        {10000 - getTotalDiezMil(turns, p.id) <= 1500 && (
-                          <span className="text-[8px] text-green-400 font-extralight">
-                            {10000 - getTotalDiezMil(turns, p.id)}
+                          {p.name}
+                        </button>
+
+                        <div className="flex flex-col items-center">
+                          <span
+                            className={`text-sm ${
+                              t <= TARGET_CHINCHON
+                                ? "text-blue-400"
+                                : "text-red-400"
+                            } font-semibold`}
+                          >
+                            {t}
                           </span>
-                        )}
+
+                          {/* si está cerca de 100, mostramos lo que falta */}
+                          {remaining <= 25 && remaining > 0 && (
+                            <span className="text-[8px] text-green-400 font-extralight">
+                              {remaining}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </th>
-                ))}
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
 
             <tbody>
               {(() => {
-                // filas = maxTurns + 1 (como ya tenías)
                 const maxTurns = Math.max(
                   0,
                   ...players.map((p) => turns[p.id]?.length ?? 0)
                 );
                 const rows = Math.max(1, maxTurns + 1);
 
-                // 🔁 índices de fila en orden inverso: nuevo → viejo
+                // nuevo → viejo
                 const rowIndexes = Array.from(
                   { length: rows },
                   (_, i) => rows - 1 - i
@@ -157,14 +168,15 @@ export default function DiezMilPage() {
 
                     {players.map((p) => {
                       const val = turns[p.id]?.[rowIndex];
+
                       const content =
                         val != null ? (
                           <span
                             className={
-                              val <= 0
+                              val < 0
                                 ? "font-bold text-red-400"
                                 : val === 0
-                                ? "text-red-400"
+                                ? "text-white/80"
                                 : "font-semibold"
                             }
                           >
@@ -199,7 +211,7 @@ export default function DiezMilPage() {
       </div>
 
       {/* Modal */}
-      <DiezMilModal
+      <ChinchonModal
         open={!!target}
         onClose={closeModal}
         title={
@@ -211,8 +223,10 @@ export default function DiezMilPage() {
         }
         onPick={onPick}
         initialValue={current}
-        sumBefore={sumBefore} // 👈 NUEVO
+        sumBefore={sumBefore}
+        targetScore={TARGET_CHINCHON} // opcional
       />
+
       <PlayerEditModal
         open={!!editingPlayer}
         player={editingPlayer}
@@ -223,7 +237,7 @@ export default function DiezMilPage() {
 
       <div className="mx-auto w-fit min-w-72 mt-5 max-w-full">
         <div className="mb-3">
-          <DiezMilEvolutionChart players={players} turns={turns} />
+          <ChinchonEvolutionChart players={players} turns={turns} />
         </div>
       </div>
     </main>
