@@ -115,7 +115,7 @@ export default function ChinchonModal({
                     key={n}
                     onClick={() => onPick(n)}
                     className={[
-                      "rounded-xl px-0 py-0.5 text-sm font-extrabold transition",
+                      "rounded-xl w-20 px-0 py-0.5 text-sm font-extrabold transition",
                       "bg-white/10 hover:bg-white/20",
 
                       // 🎨 colores especiales
