@@ -126,6 +126,8 @@ export default function ChinchonPage() {
                             className={`text-sm ${
                               t <= TARGET_CHINCHON
                                 ? "text-blue-400"
+                                : t <= 0
+                                ? "text-emerald-400"
                                 : "text-red-400"
                             } font-semibold`}
                           >
