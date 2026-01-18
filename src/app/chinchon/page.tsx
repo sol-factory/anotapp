@@ -124,10 +124,10 @@ export default function ChinchonPage() {
                         <div className="flex flex-col items-center">
                           <span
                             className={`text-sm ${
-                              t <= TARGET_CHINCHON
-                                ? "text-blue-400"
-                                : t <= 0
+                              t <= 0
                                 ? "text-emerald-400"
+                                : t <= TARGET_CHINCHON
+                                ? "text-blue-400"
                                 : "text-red-400"
                             } font-semibold`}
                           >
