@@ -35,7 +35,7 @@ export default function Home() {
         </div>
 
         {/* Opciones de juego */}
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-2">
           <GameCard
             href="/truco"
             title="Truco"
