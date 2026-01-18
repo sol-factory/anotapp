@@ -34,6 +34,13 @@ export default function ChinchonModal({
     []
   );
 
+  const decades = [
+    { label: "0–9", values: Array.from({ length: 10 }, (_, i) => i) },
+    { label: "10–19", values: Array.from({ length: 10 }, (_, i) => i + 10) },
+    { label: "20–29", values: Array.from({ length: 10 }, (_, i) => i + 20) },
+    { label: "30–39", values: Array.from({ length: 10 }, (_, i) => i + 30) }, // ajustá si querés más
+  ];
+
   const clamp = (n: number) => {
     if (Number.isNaN(n)) return 0;
     // en chinchón normalmente 0..100 por mano (pero si querés permitir más, cambialo)
@@ -87,16 +94,41 @@ export default function ChinchonModal({
               OK
             </button>
           </div>
+          <div className="mt-4 flex items-center justify-center w-full flex-wrap gap-2">
+            <button
+              key={-10}
+              onClick={() => onPick(-10)}
+              className={[
+                "rounded-xl px-4 py-1 text-sm font-extrabold transition",
+                "bg-white/10 hover:bg-white/20",
+                "text-emerald-400",
+              ].join(" ")}
+            >
+              -10
+            </button>
+          </div>
+          <div className="mt-4 grid grid-cols-4 gap-3">
+            {decades.map((group, idx) => (
+              <div key={idx} className="flex flex-col gap-2">
+                {group.values.map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => onPick(n)}
+                    className={[
+                      "rounded-xl px-0 py-1 text-sm font-extrabold transition",
+                      "bg-white/10 hover:bg-white/20",
 
-          <div className="mt-3 flex flex-wrap gap-2">
-            {quick.map((n) => (
-              <button
-                key={n}
-                onClick={() => onPick(n)}
-                className="rounded-lg bg-white/10 px-3 py-1.5 text-xs font-bold hover:bg-white/20"
-              >
-                {n}
-              </button>
+                      // 🎨 colores especiales
+                      n === -10 &&
+                        "bg-red-500/20 text-red-400 hover:bg-red-500/30",
+                      n === 0 &&
+                        "bg-blue-500/20 text-blue-400 hover:bg-blue-500/30",
+                    ].join(" ")}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
             ))}
           </div>
 
