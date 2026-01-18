@@ -109,13 +109,13 @@ export default function ChinchonModal({
           </div>
           <div className="mt-4 grid grid-cols-4 gap-3">
             {decades.map((group, idx) => (
-              <div key={idx} className="flex flex-col gap-2">
+              <div key={idx} className="flex flex-col gap-1">
                 {group.values.map((n) => (
                   <button
                     key={n}
                     onClick={() => onPick(n)}
                     className={[
-                      "rounded-xl px-0 py-1 text-sm font-extrabold transition",
+                      "rounded-xl px-0 py-0.5 text-sm font-extrabold transition",
                       "bg-white/10 hover:bg-white/20",
 
                       // 🎨 colores especiales
