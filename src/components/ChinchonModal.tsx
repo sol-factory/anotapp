@@ -59,7 +59,7 @@ export default function ChinchonModal({
         aria-hidden="true"
       />
 
-      <div className="relative w-full sm:w-[420px] rounded-t-2xl sm:rounded-2xl border border-white/10 bg-slate-900 text-slate-100 shadow-2xl">
+      <div className="relative w-full sm:w-fit rounded-t-2xl sm:rounded-2xl border border-white/10 bg-slate-900 text-slate-100 shadow-2xl">
         <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
           <div className="min-w-0">
             <div className="text-xs text-white/60">Chinchón</div>
@@ -99,7 +99,7 @@ export default function ChinchonModal({
               key={-10}
               onClick={() => onPick(-10)}
               className={[
-                "rounded-xl px-4 py-1 text-sm font-extrabold transition",
+                "rounded-md px-4 py-1 text-sm font-extrabold transition",
                 "bg-white/10 hover:bg-white/20",
                 "text-emerald-400",
               ].join(" ")}
@@ -107,7 +107,7 @@ export default function ChinchonModal({
               -10
             </button>
           </div>
-          <div className="mt-4 grid grid-cols-4 gap-1">
+          <div className="mt-4 grid grid-cols-4 gap-2">
             {decades.map((group, idx) => (
               <div key={idx} className="flex flex-col gap-1">
                 {group.values.map((n) => (
@@ -115,7 +115,7 @@ export default function ChinchonModal({
                     key={n}
                     onClick={() => onPick(n)}
                     className={[
-                      "rounded-xl w-20 px-0 py-0.5 text-sm font-extrabold transition",
+                      "rounded-md w-16 px-0 py-0.5 text-sm font-extrabold transition",
                       "bg-white/10 hover:bg-white/20",
 
                       // 🎨 colores especiales
@@ -130,21 +130,6 @@ export default function ChinchonModal({
                 ))}
               </div>
             ))}
-          </div>
-
-          <div className="mt-4 flex gap-2">
-            <button
-              onClick={onClose}
-              className="w-full rounded-xl bg-white/10 px-4 py-2 text-sm font-bold hover:bg-white/20"
-            >
-              Cancelar
-            </button>
-            <button
-              onClick={submit}
-              className="w-full rounded-xl bg-white text-slate-900 px-4 py-2 text-sm font-extrabold"
-            >
-              Guardar
-            </button>
           </div>
         </div>
       </div>
