@@ -91,7 +91,7 @@ export default function ChinchonEvolutionChart({
       </CardHeader>
 
       <CardContent className="pt-2">
-        <ChartContainer config={chartConfig} className="h-[220px] w-full">
+        <ChartContainer config={chartConfig} className="h-[220px] w-full ">
           <LineChart
             data={data}
             margin={{ top: 8, right: 12, left: 0, bottom: 0 }}
@@ -119,17 +119,10 @@ export default function ChinchonEvolutionChart({
             {/* ✅ que se note el 100 */}
             <ReferenceLine
               y={targetScore}
-              stroke="rgba(34, 197, 94, 0.9)" // verde
+              stroke="rgba(197, 34, 94, 0.9)" // verde
               strokeWidth={2}
               strokeDasharray="6 6"
               ifOverflow="extendDomain"
-              label={{
-                value: `${targetScore}`,
-                position: "right",
-                fill: "rgba(34, 197, 94, 0.95)",
-                fontSize: 10,
-                fontWeight: 800,
-              }}
             />
 
             <ChartTooltip
